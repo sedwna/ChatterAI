@@ -1,1 +1,0 @@
-{"intents": [{"tag": "slm", "patterns": ["are khobm"], "responses": ["slm khobi?"]}, {"tag": "greeting", "patterns": ["hi too", "by by"], "responses": ["hi"]}]}
