@@ -1,8 +1,17 @@
 import hazm
 
 
+def clean_up_sentence(sentence):
+    sentence_words = tokenize(sentence)
+    sentence_words = [word for word in sentence_words]  # lemmatizer(word)
+
+    return sentence_words
+
+
+stemmer = hazm.Stemmer()
+
+
 def stem(word):
-    stemmer = hazm.Stemmer()
     return stemmer.stem(word)
 
 
