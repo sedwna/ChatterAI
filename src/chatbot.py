@@ -2,38 +2,14 @@ import random
 import json
 import pickle
 import numpy as np
-import hazm
+import nlp
 
 from tensorflow.keras.models import load_model
 
 
-def lemmatizer(word):
-    return hazm.Lemmatizer().lemmatize(word)
-
-
-def tokenize(sentence):
-    return hazm.word_tokenize(sentence)
-
-
-intents = json.load(open("../json_file/info.json", 'r', encoding="utf8"))
-words = pickle.load(open('../pkl_file/words.pkl', 'rb'))
-classes = pickle.load(open('../pkl_file/classes.pkl', 'rb'))
-model = load_model('../AI_conversation_creator/chat_bot_model/chatbotmodel.h5')
-print(model.predict)
-print(words)
-print(len(words))
-
-
-def clean_up_sentence(sentence):
-    sentence_words = tokenize(sentence)
-    sentence_words = [word for word in sentence_words]  # lemmatizer(word)
-
-    return sentence_words
-
-
-def bag_of_words(sentence):
-    sentence_words = clean_up_sentence(sentence)
-    print(sentence_words)
+def bag_of_words(sentence, words):
+    sentence_words = nlp.clean_up_sentence(sentence)
+    # print(sentence_words)
     bag = [0] * len(words)
     for w in sentence_words:
         for i, word in enumerate(words):
@@ -42,17 +18,17 @@ def bag_of_words(sentence):
     return np.array(bag)
 
 
-def predict_class(sentence):
-    bow = bag_of_words(sentence)
+def predict_class(sentence, classes, model, words):
+    bow = bag_of_words(sentence, words)
     print(bow)
 
     res = model.predict(np.array([bow]))[0]
-    print(res)
+    # print(res)
 
-    ERROR_THRESHOLD = 0.27
+    ERROR_THRESHOLD = 0.40
     results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]  #
     results.sort(key=lambda x: x[1], reverse=True)
-    print(results)
+    # print(results)
 
     return_list = []
     for r in results:
@@ -72,15 +48,22 @@ def get_response(intents_list, intents_json):
     return result
 
 
-print("GO! Bot is running")
-message = input("you: ")
-while message != "خروج":
-    ints = predict_class(message)
-    if bool(ints):
-        res = get_response(ints, intents)
-        print("Bot: ", res)
+def chatbot_model(json_name):
+    intents = json.load(open(f"../json_file/{json_name}.json", 'r', encoding="utf8"))
+    words = pickle.load(open('../pkl_file/words.pkl', 'rb'))
+    classes = pickle.load(open('../pkl_file/classes.pkl', 'rb'))
+    model = load_model('../chat_bot_model/chatbotmodel.h5')
 
-    else:
-        print("Bot: we cant find a answer")
+    print("GO! Bot is running (enter -1 to exit)")
+    message = input("you: ")
+    while message != "-1":
+        ints = predict_class(message, classes, model, words)
+        if bool(ints):
+            res = get_response(ints, intents)
+            print("Bot: ", res)
 
-    message = input("")
+        else:
+            print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
+
+        message = input("you: ")
+    return

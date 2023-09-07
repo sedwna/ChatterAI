@@ -18,7 +18,7 @@ def open_file():
             flag = input(f"do you want to craete a {json_name}.json file ?(y/n) ---> ")
 
         if flag == "y":
-            json_name = add_new_file(json_name)
+            json_name = add_new_json_file(json_name)
         else:
             json_name = input("enter json file name you want to work with it (enter -1 to exit)  --> ")
     return json_name
@@ -35,24 +35,30 @@ def menu():
           "show pattern of tag enter 5\n"
           "show response of tag enter 6\n"
           "add a new json file enter 7\n"
+          "add item from csv file enter 8\n"
+          "pass data to train model enter 9\n"
+          "start chat with Bot enter 10\n"
           )
     choice = input("enter your choice ----> ")
     return choice
 
 
 # -------------------------------------------------------------------------------
-def add_new_file(json_name):
+def add_new_json_file(json_name):
     intents = {"intents": []}
     json_file = open(f"../json_file/{json_name}.json", 'w',
                      encoding="utf8")
     with open(f"../json_file/{json_name}.json", "w",
-              encoding="utf8") as outfile:
-        json.dump(intents, outfile)
+              encoding="utf8") as json_file:
+        json.dump(intents, json_file)
     json_file.close()
 
     input(f"add {json_name}.json file was successful, to continue press enter...")
+    os.system("cls")
     return json_name
 
+
+# -------------------------------------------------------------------------------
 
 def show_tag(json_name):
     json_file = open(f"../json_file/{json_name}.json", 'r',
@@ -77,8 +83,8 @@ def add_new_tag(json_name):
         return
     intents["intents"].append({"tag": f"{tag_name}", "patterns": [], "responses": []})
     with open(f"../json_file/{json_name}.json", "w",
-              encoding="utf8") as outfile:
-        json.dump(intents, outfile)
+              encoding="utf8") as json_file:
+        json.dump(intents, json_file)
     json_file.close()
     input(f"add tag {tag_name} was successful, to continue press enter...")
     os.system("cls")
@@ -103,8 +109,8 @@ def add_response(json_name):
                 intent["responses"].append(f"{new_response}")
         input(f"add response to tag {tag_name} was successful, to continue press enter...")
     with open(f"../json_file/{json_name}.json", "w",
-              encoding="utf8") as outfile:
-        json.dump(intents, outfile)
+              encoding="utf8") as json_file:
+        json.dump(intents, json_file)
     json_file.close()
 
     os.system("cls")
@@ -129,8 +135,8 @@ def add_pattern(json_name):
         input(f"add pattern to tag {tag_name} was successful, to continue press enter...")
 
     with open(f"../json_file/{json_name}.json", "w",
-              encoding="utf8") as outfile:
-        json.dump(intents, outfile)
+              encoding="utf8") as json_file:
+        json.dump(intents, json_file)
     json_file.close()
 
     os.system("cls")
@@ -163,45 +169,52 @@ def show_response(json_name):
     input("to continue press enter...")
     os.system('cls')
 
+
 # -------------------------------------main--------------------------------------
 
+def add_data_from_csv(json_name):
+    json_file = open(f"../json_file/{json_name}.json", 'r', encoding="utf8")
 
-# df = pd.read_csv("data.csv")
-# df.head()
-# json_file = open("info.json", 'r', encoding="utf8")
-# intents = json.load(json_file)
-# txt_file = open("counter.txt", "r")
-# counter = txt_file.read()
-# counter = int(counter)
-# print(counter)
-#
-# label = 0
-#
-# while label != "-1":
-#     print('user: ', df["user"][counter])
-#     print('operator: ', df["operator"][counter])
-#     for intent in intents['intents']:
-#         print(intent["tag"])
-#     print("اسپم")
-#     label = input("enter -1 to exit, tag?")
-#
-#     if label == "اسپم":
-#         counter += 1
-#         continue
-#     for intent in intents['intents']:
-#         if intent["tag"] == label:
-#             intent["patterns"].append(df["user"][counter])
-#
-#     if label != "-1":
-#         counter += 1
-#
-# txt_file.close()
-# json_file.close()
-#
-# txt_file = open("counter.txt", "w")
-# txt_file.write(str(counter))
-#
-# with open("info.json", "w", encoding="utf8") as outfile:
-#     json.dump(intents, outfile)
-#
-# print(intents)
+    csv_name = input("enter the name of csv file you want read from it ---> ")
+    df = pd.read_csv(f"../csv_file/{csv_name}.csv")
+    try:
+        txt_file = open(f"../csv_file/counter/{csv_name}_counter.txt", "r")
+    except:
+        txt_file = open(f"../csv_file/counter/{csv_name}_counter.txt", "w")
+        txt_file.write("0")
+
+    intents = json.load(json_file)
+    counter = txt_file.read()
+    counter = int(counter)
+    json_file.close()
+    txt_file.close()
+
+    while True:
+        print(counter)
+        print('user: ', df["user"][counter])
+        print('operator: ', df["operator"][counter])
+        print("-----tags-----")
+        for intent in intents['intents']:
+            print(intent["tag"])
+        print("اسپم")
+        print("--------------")
+        label = input("enter -1 to exit, tag?")
+        if label == "-1":
+            txt_file = open(f"../csv_file/counter/{csv_name}_counter.txt", "w")
+            txt_file.write(str(counter))
+
+            with open(f"../json_file/{json_name}.json", 'w', encoding="utf8") as json_file:
+                json.dump(intents, json_file)
+            txt_file.close()
+            json_file.close()
+
+            return
+        if label == "اسپم":
+            counter += 1
+            continue
+        for intent in intents['intents']:
+            if intent["tag"] == label:
+                intent["patterns"].append(df["user"][counter])
+        counter += 1
+
+    return

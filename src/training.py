@@ -2,104 +2,96 @@ import random
 import json
 import pickle
 import numpy as np
-import hazm
+import nlp
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.optimizers import SGD
 
-stemmer = hazm.Stemmer()
 
 
-def stem(word):
-    return stemmer.stem(word)
 
+def trainer(json_name):
+    print("pls wait until training completed...")
+    json_file = open(f"../json_file/{json_name}.json", 'r',
+                     encoding="utf8")
+    intents = json.load(json_file)
+    json_file.close()
 
-def lemmatizer(word):
-    return hazm.Lemmatizer().lemmatize(word)
+    words = []
+    classes = []
+    documents = []
+    ignore_letters = ['?', '!', ',', '.', '؟']
 
+    for intent in intents['intents']:
+        for pattern in intent["patterns"]:
+            pattern = nlp.normal(pattern)
+            word_list = nlp.tokenize(pattern)
+            words.extend(word_list)
+            documents.append((word_list, intent["tag"]))
+            if intent["tag"] not in classes:
+                classes.append(intent['tag'])
 
-def tokenize(sentence):
-    return hazm.word_tokenize(sentence)
+    words = [word for word in words if word not in ignore_letters]  # lemmatizer(word)
 
+    print(words)
+    print(len(words))
+    print(classes)
+    print(len(classes))
 
-def normal(sentence):
-    normalizer = hazm.Normalizer()
+    words = sorted(set(words))
+    classes = sorted(set(classes))
+    pickle.dump(words, open('../pkl_file/words.pkl', 'wb'))
+    pickle.dump(classes, open('../pkl_file/classes.pkl', 'wb'))
+    # print(words)
 
-    return normalizer.normalize(sentence)
+    training = []
+    output_empty = [0] * len(classes)
 
+    print(output_empty)
+    print(documents)
 
-intents = json.load(open("../json_file/info.json", 'r', encoding="utf8"))
+    for document in documents:
+        bag = []
 
-words = []
-classes = []
-documents = []
-ignore_letters = ['?', '!', ',', '.', '؟']
+        word_patterns = document[0]
+        # word_patterns = [word for word in words if word not in ignore_letters]  # lemmatizer(word)
+        # print(word_patterns)
+        # print(len(word_patterns))
+        for word in words:
+            bag.append(1) if word in word_patterns else bag.append(0)
+        output_row = list(output_empty)
+        output_row[classes.index(document[1])] = 1
+        training.append([bag, output_row])
+    # print(training)
+    # print("-----------------------")
+    random.shuffle(training)
+    # print(training)
+    training = np.array(training)
 
-for intent in intents['intents']:
-    for pattern in intent["patterns"]:
-        pattern = normal(pattern)
-        word_list = tokenize(pattern)
-        words.extend(word_list)
-        documents.append((word_list, intent["tag"]))
-        if intent["tag"] not in classes:
-            classes.append(intent['tag'])
+    train_x = list(training[:, 0])
+    train_y = list(training[:, 1])
 
-words = [word for word in words if word not in ignore_letters]  # lemmatizer(word)
+    # print(train_x)
+    # print(train_y)
+    # print(len(train_x))
+    # print(len(train_y))
 
-print(words)
-print(len(words))
-print(classes)
-print(len(classes))
+    model = Sequential()
+    model.add(Dense(128, input_shape=(len(train_x[0]),), activation="relu"))
+    model.add(Dropout(0.5))
+    model.add(Dense(64, activation="relu"))
+    model.add(Dropout(0.5))
+    model.add(Dense(len(train_y[0]), activation='softmax'))
 
-words = sorted(set(words))
-classes = sorted(set(classes))
-pickle.dump(words, open('../pkl_file/words.pkl', 'wb'))
-pickle.dump(classes, open('../pkl_file/classes.pkl', 'wb'))
-# print(words)
+    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
-training = []
-output_empty = [0] * len(classes)
+    hist = model.fit(np.array(train_x), np.array(train_y), epochs=50, batch_size=128, verbose=1)
+    model.save('../chat_bot_model/chatbotmodel.h5', hist)
 
-print(output_empty)
-print(documents)
+    print('your model is ready...\n'
+          'to start chat with bot back to menu and choice option 10...')
+    input("to continue press enter...")
 
-for document in documents:
-    bag = []
-
-    word_patterns = document[0]
-    # word_patterns = [word for word in words if word not in ignore_letters]  # lemmatizer(word)
-    # print(word_patterns)
-    # print(len(word_patterns))
-    for word in words:
-        bag.append(1) if word in word_patterns else bag.append(0)
-    output_row = list(output_empty)
-    output_row[classes.index(document[1])] = 1
-    training.append([bag, output_row])
-print(training)
-print("-----------------------")
-random.shuffle(training)
-print(training)
-training = np.array(training)
-
-train_x = list(training[:, 0])
-train_y = list(training[:, 1])
-
-print(train_x)
-print(train_y)
-print(len(train_x))
-print(len(train_y))
-
-model = Sequential()
-model.add(Dense(128, input_shape=(len(train_x[0]),), activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(64, activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(len(train_y[0]), activation='softmax'))
-
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
-
-hist = model.fit(np.array(train_x), np.array(train_y), epochs=50, batch_size=128, verbose=1)
-model.save('../chat_bot_model/chatbotmodel.h5', hist)
-print('Done')
+    return
