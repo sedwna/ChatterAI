@@ -9,6 +9,8 @@ from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.optimizers import SGD
 
 
+
+
 def trainer(json_name):
     print("pls wait until training completed...")
     json_file = open(f"../json_file/{json_name}.json", 'r',
@@ -32,10 +34,10 @@ def trainer(json_name):
 
     words = [word for word in words if word not in ignore_letters]  # lemmatizer(word)
 
-    # print(words)
-    # print(len(words))
-    # print(classes)
-    # print(len(classes))
+    print(words)
+    print(len(words))
+    print(classes)
+    print(len(classes))
 
     words = sorted(set(words))
     classes = sorted(set(classes))
@@ -46,8 +48,8 @@ def trainer(json_name):
     training = []
     output_empty = [0] * len(classes)
 
-    # print(output_empty)
-    # print(documents)
+    print(output_empty)
+    print(documents)
 
     for document in documents:
         bag = []

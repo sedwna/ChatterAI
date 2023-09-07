@@ -8,10 +8,8 @@ def clean_up_sentence(sentence):
     return sentence_words
 
 
-stemmer = hazm.Stemmer()
-
-
 def stem(word):
+    stemmer = hazm.Stemmer()
     return stemmer.stem(word)
 
 
