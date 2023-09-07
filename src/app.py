@@ -34,7 +34,7 @@ def menu():
           "add a patterns for tag enter 4\n"
           "show pattern of tag enter 5\n"
           "show response of tag enter 6\n"
-          "add a new json file enter 7\n"
+          # "add a new json file enter 7\n"
           "add item from csv file enter 8\n"
           "pass data to train model enter 9\n"
           "start chat with Bot enter 10\n"

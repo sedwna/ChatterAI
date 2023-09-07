@@ -20,8 +20,8 @@ while choice != '-1' and json_name != '-1':
         app.show_pattern(json_name)
     elif choice == '6':
         app.show_response(json_name)
-    elif choice == '7':
-        app.add_new_json_file(json_name)
+    # elif choice == '7':
+    #     app.add_new_json_file(json_name)
     elif choice == '8':
         app.add_data_from_csv(json_name)
     elif choice == '9':
