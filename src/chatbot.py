@@ -26,9 +26,9 @@ def predict_class(sentence, classes, model, words):
     # print(res)
 
     ERROR_THRESHOLD = 0.40
-    results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]  #
+    results = [[i, r] for i, r in enumerate(res) ]  #if r > ERROR_THRESHOLD
     results.sort(key=lambda x: x[1], reverse=True)
-    # print(results)
+    print(results)
 
     return_list = []
     for r in results:
@@ -58,7 +58,7 @@ def chatbot_model(json_name):
     message = input("you: ")
     while message != "-1":
         ints = predict_class(message, classes, model, words)
-        if bool(ints):
+        if bool(ints):  # if bool == false, it means ints it's a empty and we dont have a response
             res = get_response(ints, intents)
             print("Bot: ", res)
 

@@ -1,6 +1,14 @@
 import hazm
+import nlp
 
-normalizer = hazm.Normalizer()
-normal = normalizer.normalize("سلاام خوووووووبی؟؟؟")
+normal = nlp.normalizer_('میرم')
+normal = nlp.informal_normalizer_(normal)
 
-print(normal)
+sentence_words = [ind2[0] for ind1 in normal for ind2 in ind1]
+print(sentence_words)
+sentence_words = [nlp.lemmatizer_(word) for word in sentence_words]
+print(sentence_words)
+
+
+
+
