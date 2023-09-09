@@ -9,8 +9,6 @@ from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.optimizers import SGD
 
 
-
-
 def trainer(json_name):
     print("pls wait until training completed...")
     json_file = open(f"../json_file/{json_name}.json", 'r',
@@ -25,8 +23,10 @@ def trainer(json_name):
 
     for intent in intents['intents']:
         for pattern in intent["patterns"]:
-            pattern = nlp.normal(pattern)
-            word_list = nlp.tokenize(pattern)
+            # pattern = nlp.normalizer_(pattern)
+            # word_list = nlp.tokenizer_(pattern)
+            # print(word_list)
+            word_list = nlp.clean_up_sentence(pattern)
             words.extend(word_list)
             documents.append((word_list, intent["tag"]))
             if intent["tag"] not in classes:
@@ -35,9 +35,9 @@ def trainer(json_name):
     words = [word for word in words if word not in ignore_letters]  # lemmatizer(word)
 
     print(words)
-    print(len(words))
-    print(classes)
-    print(len(classes))
+    # print(len(words))
+    # print(classes)
+    # print(len(classes))
 
     words = sorted(set(words))
     classes = sorted(set(classes))
@@ -48,8 +48,8 @@ def trainer(json_name):
     training = []
     output_empty = [0] * len(classes)
 
-    print(output_empty)
-    print(documents)
+    # print(output_empty)
+    # print(documents)
 
     for document in documents:
         bag = []
@@ -87,7 +87,7 @@ def trainer(json_name):
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
-    hist = model.fit(np.array(train_x), np.array(train_y), epochs=50, batch_size=128, verbose=1)
+    hist = model.fit(np.array(train_x), np.array(train_y), epochs=20, batch_size=128, verbose=1)
     model.save('../chat_bot_model/chatbotmodel.h5', hist)
 
     print('your model is ready...\n'
