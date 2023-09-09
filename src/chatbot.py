@@ -9,7 +9,7 @@ from tensorflow.keras.models import load_model
 
 def bag_of_words(sentence, words):
     sentence_words = nlp.clean_up_sentence(sentence)
-    # print(sentence_words)
+    print(sentence_words)
     bag = [0] * len(words)
     for w in sentence_words:
         for i, word in enumerate(words):
@@ -23,7 +23,7 @@ def predict_class(sentence, classes, model, words):
     print(bow)
 
     res = model.predict(np.array([bow]))[0]
-    # print(res)
+    print(res)
 
     ERROR_THRESHOLD = 0.40
     results = [[i, r] for i, r in enumerate(res) ]  #if r > ERROR_THRESHOLD
