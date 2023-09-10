@@ -53,7 +53,7 @@ def chatbot_model(json_name):
     words = pickle.load(open('../pkl_file/words.pkl', 'rb'))
     classes = pickle.load(open('../pkl_file/classes.pkl', 'rb'))
     model = load_model('../chat_bot_model/chatbotmodel.h5')
-
+    print(words)
     print("GO! Bot is running (enter -1 to exit)")
     message = input("you: ")
     while message != "-1":
@@ -64,6 +64,6 @@ def chatbot_model(json_name):
 
         else:
             print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
-
+        print("-1 to exit")
         message = input("you: ")
     return

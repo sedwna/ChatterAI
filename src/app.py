@@ -170,7 +170,7 @@ def show_response(json_name):
     os.system('cls')
 
 
-# -------------------------------------main--------------------------------------
+# -------------------------------------------------------------------------------
 
 def add_data_from_csv(json_name):
     json_file = open(f"../json_file/{json_name}.json", 'r', encoding="utf8")
@@ -218,3 +218,5 @@ def add_data_from_csv(json_name):
         counter += 1
 
     return
+
+# -------------------------------------------------------------------------------
