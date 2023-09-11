@@ -64,9 +64,11 @@ def chatbot_model(json_name):
                 print("Bot: ", res)
 
             else:
-                res = chatgpt.chatgpt(message)
-                print("Bot: ", res)
-                # print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
+                try:
+                    res = chatgpt.chatgpt(message)
+                    print("Bot: ", res)
+                except:
+                    print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
         print("-1 to exit")
         messages = input("you: ")
     return
