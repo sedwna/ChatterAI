@@ -7,7 +7,7 @@ def clean_up_sentence(sentence):
     sentence_words = informal_normalizer_(sentence)  # informal and tokenize
     sentence_words = [ind2[0] for ind1 in sentence_words for ind2 in ind1]  # if 2 index just get first word
     sentence_words = [lemmatizer_(word) for word in sentence_words if word not in ignore_letters]
-    print("normalize: ", sentence_words)
+    # print("normalize: ", sentence_words)
 
     return sentence_words
 
@@ -46,3 +46,6 @@ def informal_normalizer_(sentence):
     normalizer = hazm.InformalNormalizer()
     return normalizer.normalize(sentence)
 # -------------------------------------------------------------------------------
+def sentence_tokenizer(sentence):
+    tokenizer = hazm.SentenceTokenizer()
+    return tokenizer.tokenize(sentence)

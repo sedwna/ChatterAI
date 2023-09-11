@@ -9,7 +9,6 @@ from tensorflow.keras.models import load_model
 
 def bag_of_words(sentence, words):
     sentence_words = nlp.clean_up_sentence(sentence)
-    print(sentence_words)
     bag = [0] * len(words)
     for w in sentence_words:
         for i, word in enumerate(words):
@@ -20,20 +19,20 @@ def bag_of_words(sentence, words):
 
 def predict_class(sentence, classes, model, words):
     bow = bag_of_words(sentence, words)
-    print(bow)
+    # print(bow)
 
     res = model.predict(np.array([bow]))[0]
-    print(res)
+    # print(res)
 
     ERROR_THRESHOLD = 0.40
     results = [[i, r] for i, r in enumerate(res)]  # if r > ERROR_THRESHOLD
     results.sort(key=lambda x: x[1], reverse=True)
-    print(results)
+    # print(results)
 
     return_list = []
     for r in results:
         return_list.append({'intent': classes[r[0]], 'probability': str(r[1])})
-    print("return list", return_list)
+    # print("return list", return_list)
 
     return return_list
 
@@ -53,17 +52,19 @@ def chatbot_model(json_name):
     words = pickle.load(open('../pkl_file/words.pkl', 'rb'))
     classes = pickle.load(open('../pkl_file/classes.pkl', 'rb'))
     model = load_model('../chat_bot_model/chatbotmodel.h5')
-    print(words)
+    # print(words)
     print("GO! Bot is running (enter -1 to exit)")
-    message = input("you: ")
-    while message != "-1":
-        ints = predict_class(message, classes, model, words)
-        if bool(ints):  # if bool == false, it means ints it's a empty and we don`t have a response
-            res = get_response(ints, intents)
-            print("Bot: ", res)
+    messages = input("you: ")
+    while messages != "-1":
+        messages = nlp.sentence_tokenizer(messages)
+        for message in messages:
+            ints = predict_class(message, classes, model, words)
+            if bool(ints):  # if bool == false, it means ints it's a empty and we don`t have a response
+                res = get_response(ints, intents)
+                print("Bot: ", res)
 
-        else:
-            print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
+            else:
+                print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
         print("-1 to exit")
-        message = input("you: ")
+        messages = input("you: ")
     return
