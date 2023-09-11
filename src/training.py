@@ -28,7 +28,6 @@ def trainer(json_name):
             if intent["tag"] not in classes:
                 classes.append(intent['tag'])
 
-    print(words)
 
     words = sorted(set(words))
     classes = sorted(set(classes))
