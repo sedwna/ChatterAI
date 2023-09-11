@@ -1,12 +1,11 @@
 import app
 import training
 import chatbot
-import os
+
 
 json_name = app.open_file()
 choice = 0
 while choice != '-1' and json_name != '-1':
-    os.system("cls")
     choice = app.menu()
     if choice == '1':
         app.show_tag(json_name)

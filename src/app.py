@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-import os
+
 
 
 # -------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ def add_new_json_file(json_name):
     json_file.close()
 
     input(f"add {json_name}.json file was successful, to continue press enter...")
-    os.system("cls")
+
     return json_name
 
 
@@ -68,7 +68,7 @@ def show_tag(json_name):
         print(intent["tag"])
     input("to continue press enter...")
     json_file.close()
-    os.system('cls')
+
 
 
 # -------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ def add_new_tag(json_name):
         json.dump(intents, json_file)
     json_file.close()
     input(f"add tag {tag_name} was successful, to continue press enter...")
-    os.system("cls")
+
 
 
 # -------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ def add_response(json_name):
         json.dump(intents, json_file)
     json_file.close()
 
-    os.system("cls")
+
 
 
 # -------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ def add_pattern(json_name):
         json.dump(intents, json_file)
     json_file.close()
 
-    os.system("cls")
+
 
 
 # -------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ def show_pattern(json_name):
         if intent["tag"] == tag_name:
             print(intent["patterns"])
     input("to continue press enter...")
-    os.system('cls')
+
 
 
 # -------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ def show_response(json_name):
         if intent["tag"] == tag_name:
             print(intent["responses"])
     input("to continue press enter...")
-    os.system('cls')
+
 
 
 # -------------------------------------------------------------------------------
