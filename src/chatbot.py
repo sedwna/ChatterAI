@@ -3,7 +3,7 @@ import json
 import pickle
 import numpy as np
 import nlp
-
+import chatgpt
 from tensorflow.keras.models import load_model
 
 
@@ -25,7 +25,7 @@ def predict_class(sentence, classes, model, words):
     # print(res)
 
     ERROR_THRESHOLD = 0.40
-    results = [[i, r] for i, r in enumerate(res)]  # if r > ERROR_THRESHOLD
+    results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
     results.sort(key=lambda x: x[1], reverse=True)
     # print(results)
 
@@ -64,7 +64,9 @@ def chatbot_model(json_name):
                 print("Bot: ", res)
 
             else:
-                print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
+                res = chatgpt.chatgpt(message)
+                print("Bot: ", res)
+                # print("Bot: متاسفانه پاسخ مناسبی برای درخواست شما یافت نشد")
         print("-1 to exit")
         messages = input("you: ")
     return

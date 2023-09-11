@@ -28,7 +28,6 @@ def trainer(json_name):
             if intent["tag"] not in classes:
                 classes.append(intent['tag'])
 
-
     words = sorted(set(words))
     classes = sorted(set(classes))
     pickle.dump(words, open('../pkl_file/words.pkl', 'wb'))
@@ -58,12 +57,11 @@ def trainer(json_name):
 
     train_x = list(training[:, 0])  # feature
     train_y = list(training[:, 1])  # label
-    print("train", train_x)
-    print("len", len(train_x[0]))
+    
     model = Sequential()
     model.add(Dense(128, input_shape=(len(train_x[0]),), activation="relu"))  # input layer
     model.add(Dropout(0.5))
-    model.add(Dense(64, activation="relu"))
+    model.add(Dense(64, activation="relu"))  # hidden layer
     model.add(Dropout(0.5))
     model.add(Dense(len(train_y[0]), activation='softmax'))  # output layer
 
