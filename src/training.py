@@ -65,8 +65,6 @@ def trainer(json_name):
 
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
-    print(np.array(train_x))
-    print(np.array(train_y))
     hist = model.fit(np.array(train_x), np.array(train_y), epochs=50, batch_size=128, verbose=1)
     model.save('../chat_bot_model/chatbotmodel.h5', hist)
 
