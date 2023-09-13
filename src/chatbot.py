@@ -24,7 +24,7 @@ def predict_class(sentence, classes, model, words):
     res = model.predict(np.array([bow]))[0]
     # print(res)
 
-    ERROR_THRESHOLD = 0.40
+    ERROR_THRESHOLD = 0.20
     results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
     results.sort(key=lambda x: x[1], reverse=True)
     # print(results)

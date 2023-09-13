@@ -33,7 +33,8 @@ def trainer(json_name):
     pickle.dump(words, open('../pkl_file/words.pkl', 'wb'))
     pickle.dump(classes, open('../pkl_file/classes.pkl', 'wb'))
 
-    training = []
+    train_x = []
+    train_y = []
     output_empty = [0] * len(classes)  # create zero array, count == number of tag in json file
 
     for document in documents:
@@ -49,15 +50,12 @@ def trainer(json_name):
         output_row[classes.index(document[1])] = 1
 
         # bag == 0,1 words matrix & output_row == 0,1 tags of words
-        training.append([bag, output_row])
+        train_x.append(bag)
+        train_y.append(output_row)
 
-    random.shuffle(training)
+    train_x = np.array(train_x)  # feature
+    train_y = np.array(train_y)  # label
 
-    training = np.array(training)
-
-    train_x = list(training[:, 0])  # feature
-    train_y = list(training[:, 1])  # label
-    
     model = Sequential()
     model.add(Dense(128, input_shape=(len(train_x[0]),), activation="relu"))  # input layer
     model.add(Dropout(0.5))
@@ -67,8 +65,9 @@ def trainer(json_name):
 
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
-
-    hist = model.fit(np.array(train_x), np.array(train_y), epochs=20, batch_size=128, verbose=1)
+    print(np.array(train_x))
+    print(np.array(train_y))
+    hist = model.fit(np.array(train_x), np.array(train_y), epochs=50, batch_size=128, verbose=1)
     model.save('../chat_bot_model/chatbotmodel.h5', hist)
 
     print('your model is ready...\n'
