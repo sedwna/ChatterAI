@@ -2,7 +2,6 @@ import app
 import training
 import chatbot
 
-
 json_name = app.open_file()
 choice = 0
 while choice != '-1' and json_name != '-1':
@@ -24,9 +23,22 @@ while choice != '-1' and json_name != '-1':
     elif choice == '8':
         app.add_data_from_csv(json_name)
     elif choice == '9':
-        training.trainer(json_name)
+        ch = input("1 -> bag of word\n"
+                   "2 -> weight\n"
+                   "----> ")
+        if ch == '1':
+            training.trainer_bag_of_word(json_name)
+        elif ch == '2':
+            training.trainer_weight(json_name)
+
     elif choice == '10':
-        chatbot.chatbot_model(json_name)
+        ch = input("1 -> bag of word\n"
+                   "2 -> weight\n"
+                   "----> ")
+        if ch == '1':
+            chatbot.bag_chatbot_model(json_name)
+        elif ch == '2':
+            chatbot.weight_chatbot_model(json_name)
 
 print("have a nice time...")
 
