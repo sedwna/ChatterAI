@@ -192,7 +192,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 For questions or feedback, feel free to reach out:
 
 - **Email**: [sajaddehqan2002@gmail.com]
-- **GitHub**: [[Your GitHub Profile](https://github.com/sedwna)]
+- **GitHub**: [[My GitHub Profile](https://github.com/sedwna)]
 - **Project Repository**: [[ChatterAI GitHub Repo](https://github.com/sedwna/ChatterAI)]
 
 ---
