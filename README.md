@@ -44,8 +44,7 @@ Before running the project, ensure you have the following installed:
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/sedwna/AI_Conversation.git
-   cd AI_Conversation
+   git clone https://github.com/sedwna/ChatterAI.git
    ```
 
 2. **Install Dependencies**:
