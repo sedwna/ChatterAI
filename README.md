@@ -26,7 +26,6 @@ ChatterAI is an advanced chatbot that leverages **Bag of Words** and **Weighted 
 5. [Running the Chatbot](#running-the-chatbot)
 6. [Example JSON File](#example-json-file)
 7. [Contributing](#contributing)
-8. [License](#license)
 
 ---
 
@@ -169,12 +168,6 @@ We welcome contributions to ChatterAI! If you'd like to contribute, please follo
 3. Commit your changes (`git commit -m 'Add some feature'`).
 4. Push your changes to your fork (`git push origin feature/YourFeatureName`).
 5. Open a Pull Request.
-
----
-
-## License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
